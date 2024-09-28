@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="./assets/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="container text-center pt-3">
+        <div class="search-bar-container">
+          <!-- Search Bar -->
+          <div class="mb-3">
+            <label for="inputRegex" class="form-label">Enter a RegExp:</label>
+            <input type="text" id="inputRegex" class="form-control" value="[a-z]{10,20}@(outlook|gmail)\.com" placeholder="Insert regex..." aria-label="Search">
+          </div>
+    
+          <!-- Input Number with Label -->
+          <div class="mb-3">
+            <label for="inputNumber" class="form-label">Enter a number:</label>
+            <input type="number" id="inputNumber" class="form-control" placeholder="Enter a number" value="10">
+          </div>
+    
+          <!-- Button to add to list -->
+          <button id="generate" class="btn btn-success m-0 w-100" type="button">Generate</button>
+          <button id="clear" class="btn btn-secondary m-0 w-100 mt-2" type="button">Clear</button>
+    
+          <!-- List -->
+          <div class="list-container pt-3">
+            <ul class="list-group" id="dynamicList">
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    <script src="./assets/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./index.js" type="module"></script>
+
+    <script>
+       
+    </script>
+</body>
+
+</html>
