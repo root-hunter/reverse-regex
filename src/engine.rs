@@ -1,21 +1,20 @@
-use regex::{Regex, RegexBuilder};
-use regex_syntax::{ast::{ClassUnicode, ClassUnicodeKind}, hir::{self, Hir, HirKind}, parse};
+use regex_syntax::hir::{self, Hir, HirKind};
 use rand::{self, Rng};
 
 const MAX_ITERATIONS: u32 = 128;
 
-pub fn generate(hir: Hir) -> String {
+pub fn generate_string(hir: Hir) -> String {
     match hir.kind() {
         HirKind::Capture(capture) => {
             let capture = capture.clone();
             let sub = capture.sub;
 
-            return generate(*sub);
+            return generate_string(*sub);
         },
         HirKind::Repetition(rep) => {
             let mut parts: Vec<String> = Vec::new();
             
-            let mut num: u32 = 0;
+            let num: u32;
             
             if let Some(max) = rep.max {
                 if rep.min == max {
@@ -29,7 +28,7 @@ pub fn generate(hir: Hir) -> String {
 
             for _ in 0..num {
                 let sub = rep.clone().sub;
-                parts.push(generate(*sub));
+                parts.push(generate_string(*sub));
             }
 
             return parts.join("").to_string();
@@ -45,14 +44,14 @@ pub fn generate(hir: Hir) -> String {
             
             let choice = alt.get(index).unwrap().clone();
             
-            return generate(choice);
+            return generate_string(choice);
         },
         HirKind::Concat(concats) => {
             let mut parts: Vec<String> = Vec::new();
 
             for h in concats {
                 let hit = h.clone();
-                parts.push(generate(hit));
+                parts.push(generate_string(hit));
             }
             
             return parts.join("").to_string();
@@ -73,8 +72,8 @@ pub fn generate(hir: Hir) -> String {
 
                     return char.to_string();
                 },
-                hir::Class::Bytes(class_bytes) => {
-                    return "2".to_string();
+                hir::Class::Bytes(_) => {
+                    return "*".to_string();
                 },
             };
         },

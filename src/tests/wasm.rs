@@ -1,6 +1,6 @@
 use regex::Regex;
 use regex_syntax::parse;
-use self::engine::generate;
+use reverse_regex::engine::generate;
 use wasm_bindgen_test::*;
 
 #[wasm_bindgen_test]
