@@ -3,7 +3,13 @@ use rand::{self, Rng};
 
 const MAX_ITERATIONS: u32 = 128;
 
+pub struct EngineConfig {
+
+}
+
 pub fn generate_string(hir: Hir) -> String {
+    let mut rng = rand::thread_rng();
+
     match hir.kind() {
         HirKind::Capture(capture) => {
             let capture = capture.clone();
@@ -20,10 +26,10 @@ pub fn generate_string(hir: Hir) -> String {
                 if rep.min == max {
                     num = max;
                 } else {
-                    num = rand::thread_rng().gen_range(rep.min..max) as u32;
+                    num = rng.gen_range(rep.min..max) as u32;
                 }
             } else {
-                num = rand::thread_rng().gen_range(rep.min..MAX_ITERATIONS) as u32;
+                num = rng.gen_range(rep.min..MAX_ITERATIONS) as u32;
             };
 
             for _ in 0..num {
@@ -39,7 +45,7 @@ pub fn generate_string(hir: Hir) -> String {
         HirKind::Alternation(alt) => {
             let mut index = 0;
             if alt.len() > 0 {
-                index = rand::thread_rng().gen_range(0..alt.len());
+                index = rng.gen_range(0..alt.len());
             }
             
             let choice = alt.get(index).unwrap().clone();
@@ -49,9 +55,9 @@ pub fn generate_string(hir: Hir) -> String {
         HirKind::Concat(concats) => {
             let mut parts: Vec<String> = Vec::new();
 
-            for h in concats {
-                let hit = h.clone();
-                parts.push(generate_string(hit));
+            for part in concats {
+                let hir = part.clone();
+                parts.push(generate_string(hir));
             }
             
             return parts.join("").to_string();
@@ -63,12 +69,12 @@ pub fn generate_string(hir: Hir) -> String {
                     let mut index = 0;
                     
                     if ranges.len() > 0 {
-                        index = rand::thread_rng().gen_range(0..ranges.len());
+                        index = rng.gen_range(0..ranges.len());
                     }
 
                     let class = ranges[index];
 
-                    let char: char = rand::thread_rng().gen_range(class.start()..class.end());
+                    let char: char = rng.gen_range(class.start()..class.end());
 
                     return char.to_string();
                 },
@@ -81,8 +87,7 @@ pub fn generate_string(hir: Hir) -> String {
             return "".to_string();
         },
         _ => {
-            println!("OTHER");
-            return String::from("Errrororoororor");
+            return String::from("*ERROR*");
         }
     }
 }
