@@ -10,6 +10,18 @@ export function generate(pattern: string): string;
 * @returns {string}
 */
 export function hello(pattern: string): string;
+/**
+* @param {TestPatternEnum} ttype
+* @returns {string}
+*/
+export function get_test_pattern(ttype: TestPatternEnum): string;
+/**
+*/
+export enum TestPatternEnum {
+  IPV4 = 0,
+  IPV6 = 1,
+  EMAIL = 2,
+}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -17,6 +29,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly generate: (a: number, b: number, c: number) => void;
   readonly hello: (a: number, b: number, c: number) => void;
+  readonly get_test_pattern: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

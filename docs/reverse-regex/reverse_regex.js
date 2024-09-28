@@ -167,6 +167,31 @@ export function hello(pattern) {
     }
 }
 
+function _assertNum(n) {
+    if (typeof(n) !== 'number') throw new Error(`expected a number argument, found ${typeof(n)}`);
+}
+/**
+* @param {TestPatternEnum} ttype
+* @returns {string}
+*/
+export function get_test_pattern(ttype) {
+    let deferred1_0;
+    let deferred1_1;
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        _assertNum(ttype);
+        wasm.get_test_pattern(retptr, ttype);
+        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+        deferred1_0 = r0;
+        deferred1_1 = r1;
+        return getStringFromWasm0(r0, r1);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+    }
+}
+
 function logError(f, args) {
     try {
         return f.apply(this, args);
@@ -190,6 +215,9 @@ function handleError(f, args) {
         wasm.__wbindgen_exn_store(addHeapObject(e));
     }
 }
+/**
+*/
+export const TestPatternEnum = Object.freeze({ IPV4:0,"0":"IPV4",IPV6:1,"1":"IPV6",EMAIL:2,"2":"EMAIL", });
 
 async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {
