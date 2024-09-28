@@ -1,0 +1,15 @@
+{
+  "name": "reverse_regex",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "reverse_regex_bg.wasm",
+    "reverse_regex.js",
+    "reverse_regex.d.ts"
+  ],
+  "main": "reverse_regex.js",
+  "types": "reverse_regex.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
