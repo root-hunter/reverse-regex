@@ -1,7 +1,5 @@
 import init, * as reverse_regex from "./reverse-regex/reverse_regex.js"
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const generateButton = document.getElementById("generate");
     const clearButton = document.getElementById("clear");
@@ -12,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputRegex = document.getElementById("input-pattern");
     const inputNumber = document.getElementById("input-number");
-
 
     const toastLiveExample = document.getElementById('liveToast')
     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
@@ -66,11 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const element = document.createElement('a');
         element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(out));
-        const filename = prompt("Please enter filename", "results");
+        const filename = prompt("Please enter filename", `results_${Date.now()}`);
 
         if(filename !== null) {
-   
-            element.setAttribute('download', `${filename}.csv`);
+            const full_filename = `${filename}.csv`;
+            element.setAttribute('download', full_filename);
       
             element.style.display = 'none';
             document.body.appendChild(element);
@@ -78,9 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
             element.click();
           
             document.body.removeChild(element);
-        }
 
-     
+            toastText.innerText = `CSV file generated ${full_filename} (total: ${listDiv.children.length})`;
+            toastBootstrap.show();
+        }
     });
 
     copyAll.addEventListener("click", (e) => {
