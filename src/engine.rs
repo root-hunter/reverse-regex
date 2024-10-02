@@ -1,6 +1,7 @@
 use regex_syntax::hir::{self, Hir, HirKind};
 use rand::{self, Rng};
 
+
 #[cfg(feature = "web")]
 use wasm_bindgen::prelude::wasm_bindgen;
 #[cfg(feature = "web")]
@@ -118,7 +119,7 @@ pub fn generate_string(hir: Hir, configs: &EngineConfig) -> String {
         HirKind::Empty => {
             return "".to_string();
         },
-        HirKind::Look(look) => {
+        HirKind::Look(_) => {
             return String::from("");
         },
         _ => {

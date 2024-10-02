@@ -2,7 +2,6 @@
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
 export function generate(a: number, b: number, c: number, d: number): void;
-export function hello(a: number, b: number, c: number): void;
 export function __wbg_engineconfig_free(a: number, b: number): void;
 export function __wbg_get_engineconfig_force_decimal(a: number): number;
 export function __wbg_set_engineconfig_force_decimal(a: number, b: number): void;

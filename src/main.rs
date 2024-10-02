@@ -7,7 +7,7 @@ pub fn main() {
     let hir = parse(pattern.as_str()).unwrap();
     let configs = engine::ENGINE_DEFAULT_CONFIG;
 
-    for _ in 0..10 {
+    for _ in 0..1000 {
         let result = engine::generate_string(hir.clone(), &configs);
         println!("{}", result);
     }

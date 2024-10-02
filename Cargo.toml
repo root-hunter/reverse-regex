@@ -1,26 +1,27 @@
 [package]
-name = "reverse_regex"
+name = "reverse-regex"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [features]
 web = ["wasm-bindgen", "console_error_panic_hook", "getrandom"]
 default = []
 
 [dependencies]
-rand = { version = "0.8.5", features = []}
+rand = { version = "0.8.5", features = [] }
 regex-syntax = { version = "0.8.4", features = ["unicode"] }
 
-wasm-bindgen = { version = "0.2.93", optional = true}
-console_error_panic_hook = { version = "0.1.7", optional = true }
+# Web feature
+wasm-bindgen = { version = "0.2.93", optional = true }
 getrandom = { version = "0.2", features = ["js"] , optional = true }
+console_error_panic_hook = { version = "0.1.7", optional = true }
 
 [dev-dependencies]
-regex = "1.10.6"
-wasm-bindgen-test = "0.3.34"
+regex = { version = "1.10.6" }
+wasm-bindgen-test = { version = "0.3.34" }
 
 [profile.release]
 opt-level = 3

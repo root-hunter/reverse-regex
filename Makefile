@@ -16,5 +16,8 @@ run-dev:
 build-release: test
 	cargo build --release
 
+run-release: build-release
+	cd target/release/; ./reverse-regex
+
 server: docs-build
 	python3 -m http.server 8000 -d docs

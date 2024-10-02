@@ -7,11 +7,6 @@
 */
 export function generate(pattern: string, configs?: EngineConfig): string;
 /**
-* @param {string} pattern
-* @returns {string}
-*/
-export function hello(pattern: string): string;
-/**
 */
 export class EngineConfig {
   free(): void;
@@ -37,7 +32,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly generate: (a: number, b: number, c: number, d: number) => void;
-  readonly hello: (a: number, b: number, c: number) => void;
   readonly __wbg_engineconfig_free: (a: number, b: number) => void;
   readonly __wbg_get_engineconfig_force_decimal: (a: number) => number;
   readonly __wbg_set_engineconfig_force_decimal: (a: number, b: number) => void;

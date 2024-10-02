@@ -1,5 +1,4 @@
 pub mod engine;
-use engine::{EngineConfig, ENGINE_DEFAULT_CONFIG};
 
 #[cfg(feature = "web")]
 pub mod web {
@@ -31,12 +30,6 @@ pub mod web {
         let hir = parse(&pattern).unwrap();
         return engine::generate_string(hir, &_configs);
     }
-
-    #[wasm_bindgen]
-    pub fn hello(pattern: String) -> String {
-        return format!("LOLO: {}", pattern);
-    }
-
 }
 
 pub enum TestPatternEnum {
@@ -57,9 +50,8 @@ pub fn get_test_pattern(ttype: TestPatternEnum) -> String {
 pub mod tests {
     use regex::Regex;
     use regex_syntax::parse;
-    use wasm_bindgen_test::*;
 
-    use crate::{engine, TestPatternEnum, ENGINE_DEFAULT_CONFIG};
+    use crate::{engine, TestPatternEnum};
 
     pub fn _test_pattern(ttype: TestPatternEnum) {
         let pattern = super::get_test_pattern(ttype);
@@ -68,7 +60,7 @@ pub mod tests {
         let regex = Regex::new(pattern).unwrap();
 
         let hir = parse(pattern).unwrap();
-        let configs = ENGINE_DEFAULT_CONFIG;
+        let configs = engine::ENGINE_DEFAULT_CONFIG;
 
         for _ in 0..100 {
             let result = engine::generate_string(hir.clone(), &configs);
@@ -77,20 +69,38 @@ pub mod tests {
     }
 
     #[test]
-    #[wasm_bindgen_test]
     pub fn test_pattern_ipv4() {
         _test_pattern(TestPatternEnum::IPV4);
     }
 
     #[test]
-    #[wasm_bindgen_test]
     pub fn test_pattern_ipv6() {
         _test_pattern(TestPatternEnum::IPV6);
     }
 
     #[test]
-    #[wasm_bindgen_test]
     pub fn test_pattern_email() {
+        _test_pattern(TestPatternEnum::EMAIL);
+    }
+
+    #[cfg(feature = "web")]
+    use wasm_bindgen_test::*;
+
+    #[cfg(feature = "web")]
+    #[wasm_bindgen_test]
+    pub fn test_pattern_ipv4_wasm() {
+        _test_pattern(TestPatternEnum::IPV4);
+    }
+
+    #[cfg(feature = "web")]
+    #[wasm_bindgen_test]
+    pub fn test_pattern_ipv6_wasm() {
+        _test_pattern(TestPatternEnum::IPV6);
+    }
+
+    #[cfg(feature = "web")]
+    #[wasm_bindgen_test]
+    pub fn test_pattern_email_wasm() {
         _test_pattern(TestPatternEnum::EMAIL);
     }
 }
