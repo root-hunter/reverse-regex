@@ -24,9 +24,9 @@ pub fn generate_string(hir: Hir) -> String {
             
             if let Some(max) = rep.max {
                 if rep.min == max {
-                    num = max;
+                    num = max + 1;
                 } else {
-                    num = rng.gen_range(rep.min..max) as u32;
+                    num = rng.gen_range(rep.min..(max + 1)) as u32 ;
                 }
             } else {
                 num = rng.gen_range(rep.min..MAX_ITERATIONS) as u32;
@@ -74,7 +74,13 @@ pub fn generate_string(hir: Hir) -> String {
 
                     let class = ranges[index];
 
-                    let char: char = rng.gen_range(class.start()..class.end());
+                    let first_char = class.start() as u32;
+                    let first_char = char::from_u32(first_char).unwrap();
+                    
+                    let last_char = class.end() as u32 + 1;
+                    let last_char = char::from_u32(last_char).unwrap();
+
+                    let char: char = rng.gen_range(first_char..last_char);
 
                     return char.to_string();
                 },

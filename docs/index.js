@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputRegex = document.getElementById("input-pattern");
     const inputNumber = document.getElementById("input-number");
 
-    const toastLiveExample = document.getElementById('liveToast')
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-    const toastText = document.getElementById('toast-text')
+    const toastLiveExample = document.getElementById('liveToast');
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+    const toastText = document.getElementById('toast-text');
 
     generateButton.addEventListener("click", (e) => {
         const pattern = inputRegex.value;
