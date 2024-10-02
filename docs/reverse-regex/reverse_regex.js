@@ -113,6 +113,17 @@ function passStringToWasm0(arg, malloc, realloc) {
     return ptr;
 }
 
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
+function _assertClass(instance, klass) {
+    if (!(instance instanceof klass)) {
+        throw new Error(`expected instance of ${klass.name}`);
+    }
+    return instance.ptr;
+}
+
 let cachedDataViewMemory0 = null;
 
 function getDataViewMemory0() {
@@ -123,24 +134,33 @@ function getDataViewMemory0() {
 }
 /**
 * @param {string} pattern
+* @param {EngineConfig | undefined} [configs]
 * @returns {string}
 */
-export function generate(pattern) {
-    let deferred2_0;
-    let deferred2_1;
+export function generate(pattern, configs) {
+    let deferred3_0;
+    let deferred3_1;
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(pattern, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
-        wasm.generate(retptr, ptr0, len0);
+        let ptr1 = 0;
+        if (!isLikeNone(configs)) {
+            _assertClass(configs, EngineConfig);
+            if (configs.__wbg_ptr === 0) {
+                throw new Error('Attempt to use a moved value');
+            }
+            ptr1 = configs.__destroy_into_raw();
+        }
+        wasm.generate(retptr, ptr0, len0, ptr1);
         var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
         var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        deferred2_0 = r0;
-        deferred2_1 = r1;
+        deferred3_0 = r0;
+        deferred3_1 = r1;
         return getStringFromWasm0(r0, r1);
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
-        wasm.__wbindgen_free(deferred2_0, deferred2_1, 1);
+        wasm.__wbindgen_free(deferred3_0, deferred3_1, 1);
     }
 }
 
@@ -170,27 +190,6 @@ export function hello(pattern) {
 function _assertNum(n) {
     if (typeof(n) !== 'number') throw new Error(`expected a number argument, found ${typeof(n)}`);
 }
-/**
-* @param {TestPatternEnum} ttype
-* @returns {string}
-*/
-export function get_test_pattern(ttype) {
-    let deferred1_0;
-    let deferred1_1;
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        _assertNum(ttype);
-        wasm.get_test_pattern(retptr, ttype);
-        var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-        var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-        deferred1_0 = r0;
-        deferred1_1 = r1;
-        return getStringFromWasm0(r0, r1);
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
-    }
-}
 
 function logError(f, args) {
     try {
@@ -215,9 +214,94 @@ function handleError(f, args) {
         wasm.__wbindgen_exn_store(addHeapObject(e));
     }
 }
+
+const EngineConfigFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_engineconfig_free(ptr >>> 0, 1));
 /**
 */
-export const TestPatternEnum = Object.freeze({ IPV4:0,"0":"IPV4",IPV6:1,"1":"IPV6",EMAIL:2,"2":"EMAIL", });
+export class EngineConfig {
+
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        EngineConfigFinalization.unregister(this);
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_engineconfig_free(ptr, 0);
+    }
+    /**
+    * @returns {boolean}
+    */
+    get force_decimal() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        const ret = wasm.__wbg_get_engineconfig_force_decimal(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+    * @param {boolean} arg0
+    */
+    set force_decimal(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        _assertBoolean(arg0);
+        wasm.__wbg_set_engineconfig_force_decimal(this.__wbg_ptr, arg0);
+    }
+    /**
+    * @returns {boolean}
+    */
+    get force_alphanumeric() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        const ret = wasm.__wbg_get_engineconfig_force_alphanumeric(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+    * @param {boolean} arg0
+    */
+    set force_alphanumeric(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        _assertBoolean(arg0);
+        wasm.__wbg_set_engineconfig_force_alphanumeric(this.__wbg_ptr, arg0);
+    }
+    /**
+    * @returns {number}
+    */
+    get max_iterations() {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        const ret = wasm.__wbg_get_engineconfig_max_iterations(this.__wbg_ptr);
+        return ret >>> 0;
+    }
+    /**
+    * @param {number} arg0
+    */
+    set max_iterations(arg0) {
+        if (this.__wbg_ptr == 0) throw new Error('Attempt to use a moved value');
+        _assertNum(this.__wbg_ptr);
+        _assertNum(arg0);
+        wasm.__wbg_set_engineconfig_max_iterations(this.__wbg_ptr, arg0);
+    }
+    /**
+    * @param {boolean} force_decimal
+    * @param {boolean} force_alphanumeric
+    * @param {number} max_iterations
+    */
+    constructor(force_decimal, force_alphanumeric, max_iterations) {
+        _assertBoolean(force_decimal);
+        _assertBoolean(force_alphanumeric);
+        _assertNum(max_iterations);
+        const ret = wasm.engineconfig_new(force_decimal, force_alphanumeric, max_iterations);
+        this.__wbg_ptr = ret >>> 0;
+        EngineConfigFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+}
 
 async function __wbg_load(module, imports) {
     if (typeof Response === 'function' && module instanceof Response) {

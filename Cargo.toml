@@ -7,17 +7,19 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [features]
-default = ["console_error_panic_hook"]
+web = ["wasm-bindgen", "console_error_panic_hook", "getrandom"]
+default = []
 
 [dependencies]
-wasm-bindgen = "0.2.93"
-regex = "1.10.6"
-regex-syntax = "0.8.4"
 rand = { version = "0.8.5", features = []}
+regex-syntax = { version = "0.8.4", features = ["unicode"] }
+
+wasm-bindgen = { version = "0.2.93", optional = true}
 console_error_panic_hook = { version = "0.1.7", optional = true }
-getrandom = { version = "0.2", features = ["js"] }
+getrandom = { version = "0.2", features = ["js"] , optional = true }
 
 [dev-dependencies]
+regex = "1.10.6"
 wasm-bindgen-test = "0.3.34"
 
 [profile.release]

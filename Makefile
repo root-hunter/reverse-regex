@@ -1,11 +1,11 @@
-docs-test-wasm:
-	wasm-pack test --node
+docs-test:
+	wasm-pack test --node --features web
 
-docs-build-fast-wasm:
-	wasm-pack build -d ./docs/reverse-regex  --dev --target web
+docs-build-fast:
+	wasm-pack build -d ./docs/reverse-regex  --dev --target web --features web
 	rm ./docs/reverse-regex/.gitignore
 
-docs-build-wasm: docs-test-wasm docs-build-fast-wasm
+docs-build: docs-test docs-build-fast
 
 test:
 	cargo test
@@ -16,5 +16,5 @@ run-dev:
 build-release: test
 	cargo build --release
 
-server: docs-build-wasm
+server: docs-build
 	python3 -m http.server 8000 -d docs

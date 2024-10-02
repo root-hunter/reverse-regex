@@ -1,13 +1,39 @@
 use regex_syntax::hir::{self, Hir, HirKind};
 use rand::{self, Rng};
 
-const MAX_ITERATIONS: u32 = 128;
-
+#[cfg(feature = "web")]
+use wasm_bindgen::prelude::wasm_bindgen;
+#[cfg(feature = "web")]
+#[wasm_bindgen]
 pub struct EngineConfig {
-
+    pub force_decimal: bool,
+    pub force_alphanumeric: bool,
+    pub max_iterations: u32,
 }
 
-pub fn generate_string(hir: Hir) -> String {
+#[cfg(not(feature = "web"))]
+pub struct EngineConfig {
+    pub force_decimal: bool,
+    pub force_alphanumeric: bool,
+    pub max_iterations: u32,
+}
+
+#[cfg(feature = "web")]
+#[wasm_bindgen]
+impl EngineConfig {
+    #[wasm_bindgen(constructor)]
+    pub fn new(force_decimal: bool, force_alphanumeric: bool, max_iterations: u32) -> EngineConfig {
+        EngineConfig { force_decimal, force_alphanumeric , max_iterations }
+    }
+}
+
+pub const ENGINE_DEFAULT_CONFIG: EngineConfig = EngineConfig{
+    force_decimal: true,
+    force_alphanumeric: true,
+    max_iterations: 128
+};
+
+pub fn generate_string(hir: Hir, configs: &EngineConfig) -> String {
     let mut rng = rand::thread_rng();
 
     match hir.kind() {
@@ -15,7 +41,7 @@ pub fn generate_string(hir: Hir) -> String {
             let capture = capture.clone();
             let sub = capture.sub;
 
-            return generate_string(*sub);
+            return generate_string(*sub, configs);
         },
         HirKind::Repetition(rep) => {
             let mut parts: Vec<String> = Vec::new();
@@ -29,12 +55,12 @@ pub fn generate_string(hir: Hir) -> String {
                     num = rng.gen_range(rep.min..(max + 1)) as u32 ;
                 }
             } else {
-                num = rng.gen_range(rep.min..MAX_ITERATIONS) as u32;
+                num = rng.gen_range(rep.min..configs.max_iterations) as u32;
             };
 
             for _ in 0..num {
                 let sub = rep.clone().sub;
-                parts.push(generate_string(*sub));
+                parts.push(generate_string(*sub, configs));
             }
 
             return parts.join("").to_string();
@@ -50,14 +76,14 @@ pub fn generate_string(hir: Hir) -> String {
             
             let choice = alt.get(index).unwrap().clone();
             
-            return generate_string(choice);
+            return generate_string(choice, configs);
         },
         HirKind::Concat(concats) => {
             let mut parts: Vec<String> = Vec::new();
 
             for part in concats {
                 let hir = part.clone();
-                parts.push(generate_string(hir));
+                parts.push(generate_string(hir, configs));
             }
             
             return parts.join("").to_string();
@@ -91,6 +117,9 @@ pub fn generate_string(hir: Hir) -> String {
         },
         HirKind::Empty => {
             return "".to_string();
+        },
+        HirKind::Look(look) => {
+            return String::from("");
         },
         _ => {
             return String::from("*ERROR*");
